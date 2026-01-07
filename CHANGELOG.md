@@ -1,5 +1,12 @@
 # Changelog
 
+## [6.0.2](https://github.com/lumen-oss/luarocks-build-treesitter-parser/compare/v6.0.1...v6.0.2) (2026-01-07)
+
+
+### Bug Fixes
+
+* tree-sitter generate does not support --no-bindings option ([#45](https://github.com/lumen-oss/luarocks-build-treesitter-parser/issues/45)) ([fd32e4f](https://github.com/lumen-oss/luarocks-build-treesitter-parser/commit/fd32e4f12f8f5b18bd0669c6415a40b4ddebe2cc))
+
 ## [6.0.1](https://github.com/nvim-neorocks/luarocks-build-treesitter-parser/compare/v6.0.0...v6.0.1) (2025-06-15)
 
 
