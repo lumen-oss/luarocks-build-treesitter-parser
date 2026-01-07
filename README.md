@@ -1,9 +1,5 @@
 # luarocks-build-treesitter-parser
 
-> [!WARNING]
->
-> This is early WIP!
-
 A luarocks build backend for tree-sitter parsers. 
 
 Used by the [Neovim User Rock Repository (NURR)](https://github.com/nvim-neorocks/nurr).
