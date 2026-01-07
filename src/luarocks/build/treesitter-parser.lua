@@ -65,7 +65,7 @@ function treesitter_parser.run(rockspec, no_install)
 	end
 	if build.generate then
 		local cmd
-		cmd = { "tree-sitter", "generate", "--no-bindings" }
+		cmd = { "tree-sitter", "generate" }
 		local abi = os.getenv("TREE_SITTER_LANGUAGE_VERSION")
 		if abi then
 			table.insert(cmd, "--abi")
