@@ -97,6 +97,7 @@ using a version of tree-sitter that matches what was used when the grammar was g
 		end
 		util.printout("Done.")
 	end
+	local queries_dir = dir.path("queries", build.lang)
 	if build.queries then
 		if fs.is_dir("queries") then
 			pcall(fs.delete, "queries")
@@ -105,7 +106,6 @@ using a version of tree-sitter that matches what was used when the grammar was g
 		if not fs.exists("queries") then
 			return nil, "Could not create directory: queries"
 		end
-		local queries_dir = dir.path("queries", build.lang)
 		fs.make_dir(queries_dir)
 		if not fs.exists(queries_dir) then
 			return nil, "Could not create directory: " .. queries_dir
@@ -119,6 +119,21 @@ using a version of tree-sitter that matches what was used when the grammar was g
 			fd:write(content)
 			fd:close()
 		end
+		rockspec.build.copy_directories = rockspec.build.copy_directories or {}
+		table.insert(rockspec.build.copy_directories, "queries")
+	elseif fs.is_dir("queries") and not fs.is_dir(queries_dir) then
+		local temp_dir = fs.make_temp_dir(build.lang)
+		fs.make_dir(temp_dir)
+		pcall(fs.copy, dir.path("queries", "folds.scm"), temp_dir)
+		pcall(fs.copy, dir.path("queries", "highlights.scm"), temp_dir)
+		pcall(fs.copy, dir.path("queries", "injections.scm"), temp_dir)
+		pcall(fs.copy, dir.path("queries", "locals.scm"), temp_dir)
+		pcall(fs.delete, "queries")
+		fs.make_dir(queries_dir)
+		pcall(fs.copy, dir.path(temp_dir, "folds.scm"), queries_dir)
+		pcall(fs.copy, dir.path(temp_dir, "highlights.scm"), queries_dir)
+		pcall(fs.copy, dir.path(temp_dir, "injections.scm"), queries_dir)
+		pcall(fs.copy, dir.path(temp_dir, "locals.scm"), queries_dir)
 		rockspec.build.copy_directories = rockspec.build.copy_directories or {}
 		table.insert(rockspec.build.copy_directories, "queries")
 	end
