@@ -37,6 +37,31 @@ local function execute(...)
 	return fs.execute(...)
 end
 
+---@param filename string
+---@return boolean
+local function is_query_file(filename)
+	return filename:find("%.scm$") ~= nil
+end
+
+--- Move all query files from `source_dir` into `target_dir`.
+---@param source_dir string directory containing query files
+---@param target_dir string destination directory (created if it does not exist)
+---@return boolean ok
+---@return string? error
+local function move_query_files(source_dir, target_dir)
+	fs.make_dir(target_dir)
+	if not fs.exists(target_dir) then
+		return false, "Could not create directory: " .. target_dir
+	end
+	for _, filename in pairs(fs.list_dir(source_dir)) do
+		if is_query_file(filename) then
+			fs.copy(dir.path(source_dir, filename), dir.path(target_dir, filename))
+			fs.delete(dir.path(source_dir, filename))
+		end
+	end
+	return true
+end
+
 ---@param rockspec table
 function treesitter_parser.run(rockspec, no_install)
 	---@cast rockspec RockSpec
@@ -97,6 +122,7 @@ using a version of tree-sitter that matches what was used when the grammar was g
 		end
 		util.printout("Done.")
 	end
+	local queries_dir = dir.path("queries", build.lang)
 	if build.queries then
 		if fs.is_dir("queries") then
 			pcall(fs.delete, "queries")
@@ -105,7 +131,6 @@ using a version of tree-sitter that matches what was used when the grammar was g
 		if not fs.exists("queries") then
 			return nil, "Could not create directory: queries"
 		end
-		local queries_dir = dir.path("queries", build.lang)
 		fs.make_dir(queries_dir)
 		if not fs.exists(queries_dir) then
 			return nil, "Could not create directory: " .. queries_dir
@@ -118,6 +143,13 @@ using a version of tree-sitter that matches what was used when the grammar was g
 			end
 			fd:write(content)
 			fd:close()
+		end
+		rockspec.build.copy_directories = rockspec.build.copy_directories or {}
+		table.insert(rockspec.build.copy_directories, "queries")
+	elseif fs.is_dir("queries") and not fs.is_dir(queries_dir) then
+		local ok, err = move_query_files("queries", queries_dir)
+		if not ok then
+			return nil, err
 		end
 		rockspec.build.copy_directories = rockspec.build.copy_directories or {}
 		table.insert(rockspec.build.copy_directories, "queries")

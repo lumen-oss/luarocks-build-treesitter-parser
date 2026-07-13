@@ -270,9 +270,12 @@
         }) {})
       .overrideAttrs (oa: {
         fixupPhase = ''
-          grep -q '(command_line_option)' $out/tree-sitter-tmux-scm-1-rocks/tree-sitter-tmux/scm-1/queries/tmux/highlights.scm
-          if [ $? -ne 0 ]; then
-            echo "Build did not install highlights.scm file with the expected content"
+          if [ ! -f $out/tree-sitter-tmux-scm-1-rocks/tree-sitter-tmux/scm-1/queries/tmux/highlights.scm ]; then
+            echo "Build did not install queries/tmux/highlights.scm"
+            exit 1
+          fi
+          if [ -f $out/tree-sitter-tmux-scm-1-rocks/tree-sitter-tmux/scm-1/queries/highlights.scm ]; then
+            echo "Build should not have installed queries/highlights.scm at the top level"
             exit 1
           fi
           if [ ! -f $out/lib/lua/5.1/parser/tmux.so ]; then
