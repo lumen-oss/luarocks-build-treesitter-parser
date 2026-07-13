@@ -8,9 +8,12 @@ jobs:
   nix-flake-check:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - uses: DeterminateSystems/nix-installer-action@v9
-    - uses: cachix/cachix-action@v16
+    - name: Checkout repository
+      uses: actions/checkout@v7
+    - name: Install Nix
+      uses: cachix/install-nix-action@v31
+    - name: Setup cachix
+      uses: cachix/cachix-action@v17
       with:
         name: neorocks
         authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
@@ -18,10 +21,13 @@ jobs:
   build-devShell:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - uses: DeterminateSystems/nix-installer-action@v9
-    - uses: cachix/cachix-action@v12
+    - name: Checkout repository
+      uses: actions/checkout@v7
+    - name: Install Nix
+      uses: cachix/install-nix-action@v31
+    - name: Setup cachix
+      uses: cachix/cachix-action@v17
       with:
         name: neorocks
         authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
-    - run: nix build .#devShells.x86_64-linux.default -Lv --accept-flake-config 
+    - run: nix build .#devShells.x86_64-linux.default -Lv --accept-flake-config
