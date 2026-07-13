@@ -1,5 +1,12 @@
 # Changelog
 
+## [6.1.0](https://github.com/lumen-oss/luarocks-build-treesitter-parser/compare/v6.0.2...v6.1.0) (2026-07-13)
+
+
+### Features
+
+* install parser queries if none are specified in the rockspec ([#49](https://github.com/lumen-oss/luarocks-build-treesitter-parser/issues/49)) ([c0d5e59](https://github.com/lumen-oss/luarocks-build-treesitter-parser/commit/c0d5e598032d8cf8547da69c3bc3f09688c8c425))
+
 ## [6.0.2](https://github.com/lumen-oss/luarocks-build-treesitter-parser/compare/v6.0.1...v6.0.2) (2026-01-07)
 
 
