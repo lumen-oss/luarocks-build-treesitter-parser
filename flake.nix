@@ -92,6 +92,7 @@
             tree-sitter-toml
             tree-sitter-latex
             tree-sitter-html_tags
+            tree-sitter-tmux
             ;
         };
 
@@ -109,6 +110,7 @@
             tree-sitter-toml
             tree-sitter-latex
             tree-sitter-html_tags
+            tree-sitter-tmux
             ;
         };
       };

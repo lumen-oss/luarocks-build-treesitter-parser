@@ -241,7 +241,48 @@
           export HOME=$(realpath .)
         '';
       }) {};
+
+    tree-sitter-tmux =
+      (luaself.callPackage ({
+        buildLuarocksPackage,
+        fetchFromGitHub,
+        luaOlder,
+        luarocks-build-treesitter-parser,
+      }:
+        buildLuarocksPackage {
+          pname = "tree-sitter-tmux";
+          version = "scm-1";
+          knownRockspec = "${self}/fixtures/tree-sitter-tmux-scm-1.rockspec";
+          src = fetchFromGitHub {
+            owner = "Freed-Wu";
+            repo = "tree-sitter-tmux";
+            rev = "72be3b7819bd6ca095f1f4ce365ba89d801d577c";
+            hash = "sha256-eyW62wY++H5m3MV9tz2MS8MG5vXSkUb5fYkKgzv1Krc=";
+          };
+          propagatedBuildInputs = [
+            luarocks-build-treesitter-parser
+          ];
+          disabled = luaOlder "5.1";
+          preBuild = ''
+            # tree-sitter CLI expects to be able to create log files, etc.
+            export HOME=$(realpath .)
+          '';
+        }) {})
+      .overrideAttrs (oa: {
+        fixupPhase = ''
+          grep -q '(command_line_option)' $out/tree-sitter-tmux-scm-1-rocks/tree-sitter-tmux/scm-1/queries/tmux/highlights.scm
+          if [ $? -ne 0 ]; then
+            echo "Build did not install highlights.scm file with the expected content"
+            exit 1
+          fi
+          if [ ! -f $out/lib/lua/5.1/parser/tmux.so ]; then
+            echo "Build did not create parser/tmux.so in the expected location"
+            exit 1
+          fi
+        '';
+      });
   };
+
   lua5_1_base =
     if prev.stdenv.isDarwin
     then
