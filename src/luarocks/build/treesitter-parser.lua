@@ -104,8 +104,11 @@ local function move_query_files(source_dir, target_dir)
 	end
 	for _, filename in pairs(fs.list_dir(source_dir)) do
 		if is_query_file(filename) then
-			fs.copy(dir.path(source_dir, filename), dir.path(target_dir, filename))
-			fs.delete(dir.path(source_dir, filename))
+			local source_file = fs.absolute_name(dir.path(source_dir, filename))
+			if fs.exists(source_file) then
+				fs.copy(source_file, dir.path(target_dir, filename))
+				fs.delete(source_file)
+			end
 		end
 	end
 	return true
