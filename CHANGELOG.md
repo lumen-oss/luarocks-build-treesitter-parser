@@ -1,5 +1,12 @@
 # Changelog
 
+## [6.1.1](https://github.com/lumen-oss/luarocks-build-treesitter-parser/compare/v6.1.0...v6.1.1) (2026-07-14)
+
+
+### Bug Fixes
+
+* **queries:** pass absolute path to `luarocks.fs.delete` ([8ffcab2](https://github.com/lumen-oss/luarocks-build-treesitter-parser/commit/8ffcab2e2ee4a2ba88a6fc4167a8c71bed5b69df))
+
 ## [6.1.0](https://github.com/lumen-oss/luarocks-build-treesitter-parser/compare/v6.0.2...v6.1.0) (2026-07-13)
 
 
